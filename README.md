@@ -32,5 +32,5 @@ make install
 ```
 
 ### TODO
- - have no idea how to compose a cool nn frame, so let's see what can do.
+ - have no idea how to compose a cool nn framework, so let's see what can do.
 
