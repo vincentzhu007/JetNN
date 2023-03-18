@@ -4,9 +4,16 @@ project(JetNN LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_subdirectory(3rd_party)
+option(JETNN_ENABLE_TEST "Enable JetNN test" ON)
+
+message(STATUS "JETNN_ENABLE_TEST = ${JETNN_ENABLE_TEST}")
+
+add_subdirectory(third_party)
 
 add_subdirectory(src)
 
-enable_testing()
-add_subdirectory(tests)
+if (JETNN_ENABLE_TEST)
+    # build tests
+    enable_testing()
+    add_subdirectory(tests)
+endif()

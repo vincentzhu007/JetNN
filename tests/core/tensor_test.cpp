@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include "core/tensor.h"
 
 using namespace std;
