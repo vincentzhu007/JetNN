@@ -1,11 +1,8 @@
-enable_testing()
 
-find_package(GTest REQUIRED)
-
-add_executable(jetnn-test)
-target_sources(jetnn-test PRIVATE tensor_test.cpp)
-target_link_libraries(jetnn-test PRIVATE GTest::gtest GTest::gtest_main)
+file(GLOB JETNN_UT_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+add_executable(jetnn-test ${JETNN_UT_SRC})
+target_link_libraries(jetnn-test PRIVATE gtest gtest_main)
 target_link_libraries(jetnn-test PRIVATE jetnn-core)
-
 include(GoogleTest)
 gtest_discover_tests(jetnn-test)

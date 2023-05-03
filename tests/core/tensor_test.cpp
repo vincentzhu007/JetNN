@@ -9,50 +9,25 @@
 using namespace std;
 using namespace jetnn::core;
 
-class TensorTest : public testing::Test {
- public:
-  void SetUp() {
-    cout << "set up..." << endl;
-  }
-  void TearDown() {
-    cout << "tear down..." << endl;
-  }
-};
-
-TEST_F(TensorTest, DefaultConstrutor) {
+TEST(TensorTest, DefaultConstructor) {
   Tensor tensor;
-  ASSERT_TRUE(tensor.shape().empty());
+  ASSERT_TRUE(tensor.shape().dims() == 0);
   ASSERT_TRUE(tensor.data() == nullptr);
-  ASSERT_TRUE(tensor.dtype() == DType::FLOAT32);
+  ASSERT_TRUE(tensor.data_type() == DataType::kFloat32);
 }
 
-TEST_F(TensorTest, Construtor) {
+TEST(TensorTest, Constructor) {
   constexpr int N = 2 * 3 * 4;
-  double a[N];
+  float data[N];
   for (int i = 0; i < N; i++) {
-    a[i] = i;
+    data[i] = i;
   }
 
-  Shape shape = {2, 3, 4};
+  Shape shape {2, 3, 4};
 
-  Tensor tensor(a, shape, DType::FLOAT64);
+  Tensor tensor(DataType::kFloat32, shape, data);
+  ASSERT_EQ(tensor.data_type(), DataType::kFloat32);
   ASSERT_EQ(tensor.shape(), Shape({2, 3, 4}));
   ASSERT_NE(tensor.data(), nullptr);
-  ASSERT_EQ(tensor.dtype(), DType::FLOAT64);
 }
 
-TEST_F(TensorTest, CopyConstructor) {
-  constexpr int N = 2 * 3 * 4;
-  double a[N];
-  for (int i = 0; i < N; i++) {
-    a[i] = i;
-  }
-  Shape shape = {2, 3, 4};
-  Tensor tensor_a(a, shape, DType::FLOAT64);
-
-  Tensor tensor = tensor_a;
-
-  ASSERT_EQ(tensor.shape(), Shape({2, 3, 4}));
-  ASSERT_NE(tensor.data(), nullptr);
-  ASSERT_EQ(tensor.dtype(), DType::FLOAT64);
-}
