@@ -12,14 +12,25 @@ static std::unordered_map<DataType, size_t> kDtypeSizeTable = {
 
 Tensor::Tensor(DataType data_type, const Shape &shape, const void *data) :
   data_type_(data_type), shape_(shape) {
-
-  auto size = shape_.elems() * kDtypeSizeTable[data_type];
+  auto size = data_size();
   data_ = malloc(size);
-  memcpy(data_, data, size);
+  if (data_ == nullptr) {
+    return;
+  }
+  if (data != nullptr) {
+    memcpy(data_, data, size);
+  } else {
+    memset(data_, 0, size);
+  }
 }
 
 Tensor::~Tensor() {
   free(data_);
 }
+
+size_t Tensor::data_size() const {
+  return shape_.elems() * kDtypeSizeTable[data_type_];
+}
+
 }
 }
