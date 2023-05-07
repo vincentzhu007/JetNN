@@ -39,7 +39,7 @@ enum class DataType : uint8_t {
 class Tensor {
  public:
   Tensor() = default;
-  Tensor(DataType data_type, const Shape &shape, const void *data);
+  Tensor(DataType data_type, const Shape &shape, const void *data = nullptr);
 
   /* We set Tensor as no-copyable at current stage to avoid complex semantic. */
   Tensor(const Tensor &obj) = delete;
@@ -50,20 +50,25 @@ class Tensor {
   /**
    * Member methods to get properties of the tensor.
    * - data_type(): data type of the tensor element
-   * - data()/data_as<T>(): inner data buffer head address.
    * - shape(): dimension-related meta-data of the tensor, include:
    *    - each dimension size;
    *    - element number;
    *    - data buffer size.
+   * - data()/data_as<T>(): inner data buffer head address.
    */
-  DataType data_type() { return data_type_; }
-
-  void *data() const { return data_; }
-
-  template<class T>
-  T *data_as() const { return reinterpret_cast<T *>(data_); }
-
+  DataType data_type() const { return data_type_; }
   Shape shape() const { return shape_; }
+  void *data() const { return data_; }
+  template<typename T>
+  T *data_as() const { return reinterpret_cast<T *>(data_); }
+  template<typename T>
+  T *mutable_data_as();
+
+  /**
+   * This method may have bad performance, it's used in test only!
+   */
+  template<typename T>
+  std::vector<T> DataToVector() const;
 
  private:
   DataType data_type_ = DataType::kFloat32;
